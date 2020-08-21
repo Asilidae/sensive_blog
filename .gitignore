@@ -8,3 +8,4 @@ blog/migrations/__pycache__
 sensive-blog/__pycache__
 
 .idea
+.gitignore
