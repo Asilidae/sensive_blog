@@ -33,14 +33,14 @@ def get_likes_count(post):
 
 
 def index(request):
-    posts = Post.objects.all()
-    most_fresh_posts = posts.order_by('-published_at')[:5]
+    fresh_posts = Post.objects.order_by('published_at')
+    most_fresh_posts = list(fresh_posts)[-5:]
 
-    tags = Tag.objects.all().annotate(count=Count('posts'))
-    most_popular_tags = tags.order_by('-count')
+    popular_tags = Tag.objects.annotate(num_posts=Count('posts'))
+    most_popular_tags = list(popular_tags.order_by('-num_posts'))[:5]
 
-    popular_posts = posts.annotate(count=Count('likes'))
-    most_popular_posts = popular_posts.order_by('-count')[:5]
+    popular_posts = Post.objects.annotate(num_likes=Count('likes'))
+    most_popular_posts = list(popular_posts.order_by('-num_likes'))[:5]
 
     context = {
         'most_popular_posts': [serialize_post(post) for post in most_popular_posts],
